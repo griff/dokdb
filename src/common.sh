@@ -20,11 +20,11 @@ indent_cmd() {
   fi
 }
 
-return_variable() {
-  eval echo "\$$1_$2"
+read_var() {
+  eval "echo \$$1_$2"
 }
 
-unset_variable() {
+unset_var() {
   eval unset "$1_$2"
 }
 
@@ -53,13 +53,13 @@ urlencode() {
 unset_parsed_url() {
   local prefix=DATABASE
   [ -n "$2" ] && prefix=$2
-  unset_variable $prefix SCHEME
-  unset_variable $prefix USER
-  unset_variable $prefix PASSWORD
-  unset_variable $prefix HOST
-  unset_variable $prefix PORT
-  unset_variable $prefix NAME
-  unset_variable $prefix QUERY
+  unset_var $prefix SCHEME
+  unset_var $prefix USER
+  unset_var $prefix PASSWORD
+  unset_var $prefix HOST
+  unset_var $prefix PORT
+  unset_var $prefix NAME
+  unset_var $prefix QUERY
 }
 
 parse_url() {
@@ -127,20 +127,20 @@ make_url() {
 make_url_from_env() {
   local prefix=DATABASE
   [ -n "$1" ] && prefix="$1"
-  local scheme="$(return_variable $prefix SCHEME)"
-  local user="$(return_variable $prefix USER)"
-  local password="$(return_variable $prefix PASSWORD)"
-  local host="$(return_variable $prefix HOST)"
-  local port="$(return_variable $prefix PORT)"
-  local name="$(return_variable $prefix NAME)"
-  local query="$(return_variable $prefix QUERY)"
+  local scheme="$(read_var $prefix SCHEME)"
+  local user="$(read_var $prefix USER)"
+  local password="$(read_var $prefix PASSWORD)"
+  local host="$(read_var $prefix HOST)"
+  local port="$(read_var $prefix PORT)"
+  local name="$(read_var $prefix NAME)"
+  local query="$(read_var $prefix QUERY)"
   make_url "$scheme" "$user" "$password" "$host" "$port" "$name" "$query"
 }
 
 make_docker_link_database_url() {
   local prefix=DOKDB
   [ -n "$1" ] && prefix="$(echo $1 | tr '[:lower:]' '[:upper:]')"
-  local port=$(return_variable $prefix ENV_DATABASE_PORT)
+  local port=$(read_var $prefix ENV_DATABASE_PORT)
   local override_hostport="$(eval echo \$OVERRIDE_${prefix}_HOSTPORT)"
 
   if [ -n "$override_hostport" ]; then
@@ -172,7 +172,7 @@ detect_dokdb_link() {
   local prefix=DOKDB
   [ -n "$1" ] && prefix="$(echo $1 | tr '[:lower:]' '[:upper:]')"
   for var in 'NAME' 'ENV_DATABASE_SCHEME' 'ENV_DATABASE_PORT' 'ENV_DATABASE_NAME' ; do
-    if [ -z "$(return_variable $prefix $var)" ]; then
+    if [ -z "$(read_var $prefix $var)" ]; then
       return 1
     fi
   done
