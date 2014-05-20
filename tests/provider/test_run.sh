@@ -21,8 +21,8 @@ testSimpleRun() {
     url=$(make_docker_link_database_url)
     assertEquals "$SCHEME://demo:demo@$ip:$DOKDB_ENV_DATABASE_PORT/demo" "$url"
 
-    url=$(make_docker_link_root_database_url)
-    assertEquals "$SCHEME://root:root@$ip:$DOKDB_ENV_DATABASE_PORT/demo" "$url"
+    url=$(make_docker_link_admin_database_url)
+    assertEquals "$SCHEME://admin:admin@$ip:$DOKDB_ENV_DATABASE_PORT/demo" "$url"
   )
 
   sleep 6
@@ -30,12 +30,14 @@ testSimpleRun() {
   docker run --rm --link $NAME:dokdb $PROVIDER test -q
   assertEquals "Test connection" "0" "$?"
 
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q --root
-  assertEquals "Test root connection" "0" "$?"
+  docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
+  assertEquals "Test admin connection" "0" "$?"
 }
 
 testRunWithOptions() {
-  make_container NAME -e DATABASE_NAME=dbname -e DATABASE_USER=dbuser -e DATABASE_HOST=localhost -e DATABASE_PASSWORD=dbpwd
+  make_container NAME -e DATABASE_NAME=dbname -e DATABASE_HOST=localhost \
+    -e DATABASE_USER=dbuser -e DATABASE_PASSWORD=dbpwd \
+    -e DATABASE_ADMIN_USER=mastercommander -e DATABASE_ADMIN_PASSWORD=knockknock
   local ip="$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $NAME)"
 
   # Test that we can get a database url when linking
@@ -44,15 +46,15 @@ testRunWithOptions() {
     eval "$vars"
     url=$(make_docker_link_database_url)
     assertEquals "$SCHEME://dbuser:dbpwd@$ip:$DOKDB_ENV_DATABASE_PORT/dbname" "$url"
-    url=$(make_docker_link_root_database_url)
-    assertEquals "$SCHEME://root:root@$ip:$DOKDB_ENV_DATABASE_PORT/dbname" "$url"
+    url=$(make_docker_link_admin_database_url)
+    assertEquals "$SCHEME://mastercommander:knockknock@$ip:$DOKDB_ENV_DATABASE_PORT/dbname" "$url"
   )
   sleep 6
   docker run --rm --link $NAME:dokdb $PROVIDER test -q
   assertEquals "Test connection" "0" "$?"
 
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q --root
-  assertEquals "Test root connection" "0" "$?"
+  docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
+  assertEquals "Test admin connection" "0" "$?"
 }
 
 testRestartImmediately() {
@@ -65,8 +67,8 @@ testRestartImmediately() {
   docker run --rm --link $NAME:dokdb $PROVIDER test -q
   assertEquals "Test connection" "0" "$?"
 
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q --root
-  assertEquals "Test root connection" "0" "$?"
+  docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
+  assertEquals "Test admin connection" "0" "$?"
 }
 
 testRestartAfterStartup() {
@@ -81,8 +83,8 @@ testRestartAfterStartup() {
   docker run --rm --link $NAME:dokdb $PROVIDER test -q
   assertEquals "Test connection" "0" "$?"
 
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q --root
-  assertEquals "Test root connection" "0" "$?"
+  docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
+  assertEquals "Test admin connection" "0" "$?"
 }
 
 . $(dirname $0)/../../shunit2/src/shunit2

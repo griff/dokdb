@@ -19,9 +19,9 @@ testLink() {
   assertEquals "Test connection" "0" "$?"
 }
 
-testRootLink() {
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q --root
-  assertEquals "Test root connection" "0" "$?"
+testAdminLink() {
+  docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
+  assertEquals "Test admin connection" "0" "$?"
 }
 
 testRestart() {

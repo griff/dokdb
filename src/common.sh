@@ -160,11 +160,11 @@ make_docker_link_database_url() {
   make_url_from_env "${prefix}_ENV_DATABASE"
 }
 
-make_docker_link_root_database_url() {
+make_docker_link_admin_database_url() {
   local prefix=DOKDB
   [ -n "$1" ] && prefix="$(echo $1 | tr '[:lower:]' '[:upper:]')"
-  eval "local ${prefix}_ENV_DATABASE_USER=\$${prefix}_ENV_DATABASE_ROOT_USER"
-  eval "local ${prefix}_ENV_DATABASE_PASSWORD=\$${prefix}_ENV_DATABASE_ROOT_PASSWORD"
+  eval "local ${prefix}_ENV_DATABASE_USER=\$${prefix}_ENV_DATABASE_ADMIN_USER"
+  eval "local ${prefix}_ENV_DATABASE_PASSWORD=\$${prefix}_ENV_DATABASE_ADMIN_PASSWORD"
   make_docker_link_database_url "$prefix"
 }
 
@@ -179,16 +179,16 @@ detect_dokdb_link() {
 }
 
 ensure_database_url() {
-  if [ "$1" = "--root" -o "$1" = "-r" ]; then
-      local use_root=1
+  if [ "$1" = "--admin" -o "$1" = "-r" ]; then
+    local use_admin=1
       shift
   fi
   if [ -z "$DATABASE_URL" ]; then
       prefix="DOKDB"
-      if [ -z "$use_root" ]; then
+      if [ -z "$use_admin" ]; then
           DATABASE_URL="$(make_docker_link_database_url $prefix)"
       else
-          DATABASE_URL="$(make_docker_link_root_database_url $prefix)"
+          DATABASE_URL="$(make_docker_link_admin_database_url $prefix)"
       fi
   fi
 }
