@@ -178,17 +178,16 @@ detect_dokdb_link() {
   done
 }
 
-ensure_database_url() {
+set_dokdb_database_url() {
   if [ "$1" = "--admin" -o "$1" = "-r" ]; then
-    local use_admin=1
-      shift
+    local use_admin='admin_'
+    shift
   fi
   if [ -z "$DATABASE_URL" ]; then
-      prefix="DOKDB"
-      if [ -z "$use_admin" ]; then
-          DATABASE_URL="$(make_docker_link_database_url $prefix)"
-      else
-          DATABASE_URL="$(make_docker_link_admin_database_url $prefix)"
-      fi
+    if detect_dokdb_link DOKDB; then
+      DATABASE_URL="$(make_docker_link_${use_admin}database_url DOKDB)"
+    elif detect_dokdb_link DB; then
+      DATABASE_URL="$(make_docker_link_${use_admin}database_url DB)"
+    fi
   fi
 }
