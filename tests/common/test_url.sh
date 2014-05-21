@@ -67,10 +67,10 @@ testBasicURLParsing3() {
 
 testParsingUrlDecode() {
   resetURLParameters testParsingUrlDecode
-  parse_url "mug://mu%C2%A9llet:super%C2%A9secret@mic%C2%A9k.example.com/na%C2%A9me?a%C2%A9rg=te%C2%A9st"
+  parse_url "mug://mu%C2%A9llet:fg%27l%20%22e%3Blk%C2%A9kd@mic%C2%A9k.example.com/na%C2%A9me?a%C2%A9rg=te%C2%A9st"
   assertEquals "Database scheme"     'mug' "${DATABASE_SCHEME}"
   assertEquals "Database user"       'mu©llet' "${DATABASE_USER}"
-  assertEquals "Database password"   'super©secret' "${DATABASE_PASSWORD}"
+  assertEquals "Database password"   "fg'l \"e;lk©kd" "${DATABASE_PASSWORD}"
   assertEquals "Database host"       'mic©k.example.com' "${DATABASE_HOST}"
   assertEquals "Database port"       'testParsingUrlDecode port' "${DATABASE_PORT}"
   assertEquals "Database name"       'na©me' "${DATABASE_NAME}"

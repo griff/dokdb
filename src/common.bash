@@ -155,11 +155,11 @@ parse_url() {
   local -i rc=0
   
   [ -n "$proto" ] && eval "export ${prefix}_SCHEME=\"$scheme\"" || rc=$?
-  [ -n "$user" ] && eval "export ${prefix}_USER=\"`urldecode $user`\"" || rc=$?
-  [ -n "$pass" ] && eval "export ${prefix}_PASSWORD=\"`urldecode $pass`\"" || rc=$?
-  [ -n "$host" ] && eval "export ${prefix}_HOST=\"`urldecode $host`\"" || rc=$?
-  [ -n "$port" ] && eval "export ${prefix}_PORT=\"`urldecode $port`\"" || rc=$?
-  [ -n "$path" ] && eval "export ${prefix}_NAME=\"`urldecode $path`\"" || rc=$?
+  [ -n "$user" ] && eval "export ${prefix}_USER=\"$(urldecode $user | sed -e 's/"/\\"/g')\"" || rc=$?
+  [ -n "$pass" ] && eval "export ${prefix}_PASSWORD=\"$(urldecode $pass | sed -e 's/"/\\"/g')\"" || rc=$?
+  [ -n "$host" ] && eval "export ${prefix}_HOST=\"$(urldecode $host | sed -e 's/"/\\"/g')\"" || rc=$?
+  [ -n "$port" ] && eval "export ${prefix}_PORT=\"$(urldecode $port | sed -e 's/"/\\"/g')\"" || rc=$?
+  [ -n "$path" ] && eval "export ${prefix}_NAME=\"$(urldecode $path | sed -e 's/"/\\"/g')\"" || rc=$?
   [ -n "$query" ] && eval "export ${prefix}_QUERY=\"$query\"" || rc=$?
 }
 
