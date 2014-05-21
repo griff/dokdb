@@ -10,7 +10,7 @@ if [ -z "$DOKDB_TEST_PORT" ]; then
   exit 1
 fi
 
-. $(dirname $0)/../../src/common.sh
+. $(dirname $0)/../../src/common.bash
 
 setup_containers() {
   #echo "Doing setup..."

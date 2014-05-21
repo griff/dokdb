@@ -2,7 +2,7 @@
 
 set -o errexit
 
-. $(dirname $0)/../../src/common.sh
+. $(dirname $0)/../../src/common.bash
 
 tearDown() {
   unset DATABASE_URL
