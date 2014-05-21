@@ -238,7 +238,7 @@ detect_dokdb_link() {
 }
 
 set_dokdb_database_url() {
-  if [ "$1" = "--admin" -o "$1" = "-r" ]; then
+  if [ "$1" = "--admin" -o "$1" = "-a" ]; then
     local use_admin='admin_'
     shift
   fi
