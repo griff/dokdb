@@ -19,6 +19,16 @@ resetURLParameters() {
   export DATABASE_QUERY="$1 query"
 }
 
+testUrlencode() {
+  url=`urlencode mu©llet`
+  assertEquals 'mu%C2%A9llet' "$url"
+}
+
+testUrldecode() {
+  url=`urldecode mu%C2%A9llet`
+  assertEquals 'mu©llet' "$url"
+}
+
 testBasicURLParsing1() {
   resetURLParameters testBasicURLParsing1
   parse_url "mug://test.example.com/name"
@@ -80,11 +90,6 @@ testMakeURL2() {
 testMakeURL3() {
   url=`make_url mug mullet '' 192.168.10.1 1024 name arg=test`
   assertEquals 'mug://mullet@192.168.10.1:1024/name?arg=test' "$url"
-}
-
-testUrlencode() {
-  url=`urlencode mu©llet`
-  assertEquals 'mu%C2%A9llet' "$url"
 }
 
 testMakeURLEncode() {
