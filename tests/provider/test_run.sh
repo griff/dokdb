@@ -27,11 +27,11 @@ testSimpleRun() {
 
   sleep 6
 
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q
-  assertEquals "Test connection" "0" "$?"
+  assertSucceeds "Test connection" \
+    docker run --rm --link $NAME:dokdb $PROVIDER test -q
 
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
-  assertEquals "Test admin connection" "0" "$?"
+  assertSucceeds "Test connection" \
+    docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
 }
 
 testRunWithOptions() {
@@ -50,11 +50,11 @@ testRunWithOptions() {
     assertEquals "$SCHEME://mastercommander:knockknock@$ip:$DOKDB_ENV_DATABASE_PORT/dbname" "$url"
   )
   sleep 6
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q
-  assertEquals "Test connection" "0" "$?"
+  assertSucceeds "Test connection" \
+    docker run --rm --link $NAME:dokdb $PROVIDER test -q
 
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
-  assertEquals "Test admin connection" "0" "$?"
+  assertSucceeds "Test connection" \
+    docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
 }
 
 testRestartImmediately() {
@@ -64,11 +64,11 @@ testRestartImmediately() {
 
   sleep 6
 
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q
-  assertEquals "Test connection" "0" "$?"
+  assertSucceeds "Test connection" \
+    docker run --rm --link $NAME:dokdb $PROVIDER test -q
 
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
-  assertEquals "Test admin connection" "0" "$?"
+  assertSucceeds "Test connection" \
+    docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
 }
 
 testRestartAfterStartup() {
@@ -80,11 +80,11 @@ testRestartAfterStartup() {
 
   sleep 6
 
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q
-  assertEquals "Test connection" "0" "$?"
+  assertSucceeds "Test connection" \
+    docker run --rm --link $NAME:dokdb $PROVIDER test -q
 
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
-  assertEquals "Test admin connection" "0" "$?"
+  assertSucceeds "Test connection" \
+    docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
 }
 
 . $(dirname $0)/../../shunit2/src/shunit2

@@ -26,6 +26,22 @@ remove_containers() {
   done
 }
 
+assertFails() {
+  local msg="$1"
+  shift
+  if "$@"; then
+    fail "$msg"
+  fi
+}
+
+assertSucceeds() {
+  local msg="$1"
+  shift
+  if ! "$@"; then
+    fail "$msg"
+  fi
+}
+
 make_container() {
   local output=$1
   shift

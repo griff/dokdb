@@ -15,13 +15,13 @@ oneTimeTearDown() {
 testLink() {
   #local ip="$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $name)"
 
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q
-  assertEquals "Test connection" "0" "$?"
+  assertSucceeds "Test connection" \
+    docker run --rm --link $NAME:dokdb $PROVIDER test -q
 }
 
 testAdminLink() {
-  docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
-  assertEquals "Test admin connection" "0" "$?"
+  assertSucceeds "Test connection" \
+    docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
 }
 
 testRestart() {
