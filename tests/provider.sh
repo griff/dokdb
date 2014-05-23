@@ -45,7 +45,7 @@ remove_containers() {
 make_container() {
   local output=$1
   shift
-  local cid="$(docker run -d $@ $PROVIDER run)"
+  local cid="$(docker run -d "$@" $PROVIDER run)"
   CONTAINERS+=($cid)
   local name=$(docker inspect --format '{{ .Name }}' $cid)
   eval "export $output='$name'"
