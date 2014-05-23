@@ -39,8 +39,49 @@ assertFails() {
 assertSucceeds() {
   local msg="$1"
   shift
+  #echo "$@"
   if ! "$@"; then
     fail "$msg"
+  fi
+}
+
+assertSelfTestSetup() {
+  if has_extension self-test; then
+    local msg="$1"
+    local dbname="$2"
+    shift 2
+    assertSucceeds "$msg" \
+      docker run --rm --link $dbname:dokdb "$@" $PROVIDER self-test-setup -q
+  fi
+}
+
+assertFailsSelfTestSetup() {
+  if has_extension self-test; then
+    local msg="$1"
+    local dbname="$2"
+    shift 2
+    assertFails "$msg" \
+      docker run --rm --link $dbname:dokdb "$@" $PROVIDER self-test-setup -q
+  fi
+}
+
+assertSelfTest() {
+  if has_extension self-test; then
+    local msg="$1"
+    local dbname="$2"
+    shift 2
+    assertSucceeds "$msg" \
+      docker run --rm --link $dbname:dokdb "$@" $PROVIDER self-test -q
+  fi
+}
+
+assertFailsSelfTest() {
+  if has_extension self-test; then
+    local msg="$1"
+    local dbname="$2"
+    shift 2
+    assertFails "$msg" \
+      docker run --rm --link $dbname:dokdb "$@" $PROVIDER self-test -q
   fi
 }
 
