@@ -11,23 +11,10 @@ fi
 
 . $(dirname $0)/../../src/common.bash
 
-setup_containers() {
-  #echo "Doing setup..."
-  CONTAINERS=()
-}
-
-remove_containers() {
-  #echo "Doing cleanup... ${CONTAINERS[@]}"
-  for k in ${CONTAINERS[@]} ; do
-    echo "Stopping: $k"
-    docker stop $k > /dev/null
-    docker rm -v $k > /dev/null
-  done
-}
-
 assertFails() {
   local msg="$1"
   shift
+  #echo "$@"
   if "$@"; then
     fail "$msg"
   fi
@@ -39,6 +26,20 @@ assertSucceeds() {
   if ! "$@"; then
     fail "$msg"
   fi
+}
+
+setup_containers() {
+  #echo "Doing setup..."
+  CONTAINERS=()
+}
+
+remove_containers() {
+  #echo "Doing cleanup... ${CONTAINERS[@]}"
+  for k in ${CONTAINERS[@]} ; do
+    #echo "Stopping: $k"
+    docker stop $k > /dev/null
+    docker rm -v $k > /dev/null
+  done
 }
 
 make_container() {
