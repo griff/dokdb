@@ -47,6 +47,6 @@ make_container() {
   shift
   local cid="$(docker run -d "$@" $PROVIDER run)"
   CONTAINERS+=($cid)
-  local name=$(docker inspect --format '{{ .Name }}' $cid)
+  local name=$(docker inspect --format '{{ .Name }}' $cid | sed -e 's/^\///g')
   eval "export $output='$name'"
 }
