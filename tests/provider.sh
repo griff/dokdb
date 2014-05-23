@@ -1,4 +1,3 @@
-set -o errexit
 [ -n "$DEBUG" ] && set -x
 if [ -z "$SCHEME" ]; then 
   SCHEME="$(docker run --rm --entrypoint sh $PROVIDER -c 'echo $DATABASE_SCHEME')"
