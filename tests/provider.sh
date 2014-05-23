@@ -9,6 +9,22 @@ if [ -z "$DOKDB_TEST_PORT" ]; then
   exit 1
 fi
 
+DOKDB_EXTENSIONS="$(docker run --rm $PROVIDER extensions)"
+require_extension() {
+  found="$(echo "$DOKDB_EXTENSIONS" | grep "$1")"
+  if [ -z "$found" ]; then
+    echo "Skipping $0 tests because $1 is not supported by provider"
+    exit 0
+  fi
+}
+
+has_extension() {
+  found="$(echo "$DOKDB_EXTENSIONS" | grep "$1")"
+  if [ -z "$found" ]; then
+    return 1
+  fi
+}
+
 . $(dirname $0)/../../src/common.bash
 
 assertFails() {
