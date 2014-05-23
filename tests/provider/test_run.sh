@@ -87,4 +87,16 @@ testRestartAfterStartup() {
     docker run --rm --link $NAME:dokdb $PROVIDER test -q --admin
 }
 
+testPasswordChange() {
+  make_container NAME
+  sleep 6
+  docker stop $NAME > /dev/null
+
+  make_container NAME2 --volumes-from $NAME -e DATABASE_PASSWORD=muh
+  sleep 6
+
+  assertSucceeds "Test connection" \
+    docker run --rm --link $NAME2:dokdb $PROVIDER test -q
+}
+
 . $(dirname $0)/../../shunit2/src/shunit2
