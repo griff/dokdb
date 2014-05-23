@@ -3,6 +3,11 @@ message() {
     echo "$*" 1>&2
   fi
 }
+message_n() {
+  if [ -z "$QUIET" ]; then
+    echo -n "$*" 1>&2
+  fi
+}
 
 cmd() {
   if [ "$QUIET" = "-q" ]; then
