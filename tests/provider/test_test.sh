@@ -48,12 +48,11 @@ testRestart() {
   assertEquals "Test connection" "0" "$ext"
 
   docker restart $RESTARTED > /dev/null
-
   sleep 6
 
   docker start $cid > /dev/null
   local ext=$(docker wait $cid)
-  assertEquals "Test connection" "0" "$ext"
+  assertEquals "Test connection restarted" "0" "$ext"
 }
 
 . $(dirname $0)/../../shunit2/src/shunit2
