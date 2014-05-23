@@ -12,11 +12,16 @@ cmd() {
   fi
 }
 
+indent() {
+  (while read; do echo "    $REPLY"; done)
+}
+
 indent_cmd() {
   if [ "$QUIET" = "-q" ]; then
-    "$@" > /dev/null 2>&1
+    "$@" 2> /dev/null
   else
-    "$@" | (while read; do echo "    $REPLY"; done) 1>&2
+    { "$@" 2>&1 1>&3 | indent 1>&2; } 3>&1
+    return ${PIPESTATUS[0]}
   fi
 }
 
