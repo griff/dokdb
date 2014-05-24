@@ -99,4 +99,16 @@ testPasswordChange() {
     docker run --rm --link $NAME2:dokdb $PROVIDER test -q
 }
 
+testAdminPasswordChange() {
+  make_container NAME
+  sleep 6
+  docker stop $NAME > /dev/null
+
+  make_container NAME2 --volumes-from $NAME -e DATABASE_ADMIN_PASSWORD=muh
+  sleep 6
+
+  assertSucceeds "Test connection" \
+    docker run --rm --link $NAME2:dokdb $PROVIDER test --admin
+}
+
 . $(dirname $0)/../../shunit2/src/shunit2
