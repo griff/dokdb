@@ -25,6 +25,17 @@ tearDown() {
   remove_containers
 }
 
+testDatabaseServerOnly() {
+  make_container ONLY -e "DATABASE_SERVER_ONLY=true"
+
+  sleep 6
+  assertFails "Has no database" \
+    docker run --rm --link $ONLY:dokdb $PROVIDER test -q
+
+  local after="$(docker run --rm --link $ONLY:dokdb $PROVIDER list-databases | grep demo)"
+  assertNull "$after"
+}
+
 testCreateDatabase() {
   local before="$(docker run --rm --link $NAME:dokdb $PROVIDER list-databases | grep 'muhdb')"
   assertNull "$before"
